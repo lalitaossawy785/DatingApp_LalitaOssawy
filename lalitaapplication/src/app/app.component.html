@@ -1,0 +1,8 @@
+<h1>{{title}}</h1>
+
+<ul>
+    <!-- Structucal Directors *ngFor - has to be within the opening tag -->
+    <li *ngFor='let user of users'>
+        {{user.id}} - {{user.userName}}
+    </li>
+</ul>

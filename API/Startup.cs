@@ -31,6 +31,7 @@ namespace API
                 options.UseSqlite(_config.GetConnectionString("DefaultConnection")); //Connect to dB based on this specific connection string
             });
             services.AddControllers();
+            services.AddCors(); //CORS - Cross-origin resource sharing 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +47,10 @@ namespace API
 
             app.UseRouting(); //Routing, 
 
+            //CORS Policy to local host
+            // x = policy
+            app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200")); //Appropiate placing between Routing and Authorization - **important**
+       
             app.UseAuthorization(); //Authorisation - needs configured
 
             app.UseEndpoints(endpoints => //Middlewear end points
