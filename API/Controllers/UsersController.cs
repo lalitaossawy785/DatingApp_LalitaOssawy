@@ -3,14 +3,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
 using API.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc; //Modern View Controller - use .NET to serve HTML pages
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")] //specify api/users to get to this controller
-    public class UsersController : ControllerBase //Derive from ControllerBase
+    //Attributes available from Derived Class
+    public class UsersController : BaseApiController //Derive from BaseApiController
     {
         private readonly DataContext _context; //private readonly variable
         public UsersController(DataContext context) //Generated Constructor - Dependancy Injection
@@ -19,11 +19,11 @@ namespace API.Controllers
             _context = context; // Intializing field from parameter
         }
 
-
         /** -- Use asynchronous when possible -- **/
 
         // End point to get all users from dB
         [HttpGet]
+        [AllowAnonymous]
         // IEnumerable allows us to use simple iteration over a collection of a specified type
         // More appropiate as we do not need to sort or search
         // public ActionResult<IEnumerable<AppUser>> GetUsers()   - Sending back list of users to the client
@@ -34,7 +34,7 @@ namespace API.Controllers
             return await _context.Users.ToListAsync(); //The list becomes asynchronous, returning asynchonously
         }
 
-
+        [Authorize] //Adds authorisating to the get user end point
         // End point to get individual users
         // specified route parameter for example -  api/users/3 - 3 is the id fetched
         [HttpGet("{id}")] // Specified route parameter
